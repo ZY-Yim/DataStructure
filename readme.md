@@ -40,8 +40,19 @@ Brute Force: $ O(n!) $
 Count and Compare: $ O(n) $
 
 ### Performance of Python Data Structures
+the Big-O performance for the operations on Python lists and dictionaries
 #### List
+common operations: indexing and assign to an index position $ O(1) $ \ grow a list 
 
+generate a list of $ n $ numbers: 
+* concatenation: $ O(k) $
+* append: $ O(1) $
+* comprehension: 
+* range function: 
+
+Big-O Efficiency of Python List Operations
+
+<img src="C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211009160325627.png" alt="image-20211009160325627" style="zoom:50%;" />
 
 #### Dict
 
