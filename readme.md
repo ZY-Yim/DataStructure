@@ -1,5 +1,7 @@
 # Problem Solving with Algorithms and Data Structures
 
+[TOC]
+
 ## Introduction
 ### Review of Basic Python
 #### Data
