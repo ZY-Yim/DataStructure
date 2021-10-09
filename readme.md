@@ -31,9 +31,9 @@ with respect to the size of the problem.
 order of magnitude, it provides a useful approximation to the actual number of steps in the computation.
 
 #### Anagram Detection
-Checking Off: $ 𝑂(𝑛^2) $
+Checking Off: $ 𝑂(n^2) $
 
-Sort and Compare: $ 𝑂(𝑛^2) $ or $ 𝑂(𝑛logn) $
+Sort and Compare: $ 𝑂(n^2) $ or $ 𝑂(nlogn) $
 
 Brute Force: $ O(n!) $
 
