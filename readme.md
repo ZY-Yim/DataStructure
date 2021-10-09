@@ -55,8 +55,9 @@ Big-O Efficiency of Python List Operations
 <img src="C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211009160325627.png" alt="image-20211009160325627" style="zoom:50%;" />
 
 #### Dict
+Big-O Efficiency of Python Dictionary Operations
 
-
+<img src="C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211009170052665.png" alt="image-20211009170052665" style="zoom:50%;" />
 
 
 
