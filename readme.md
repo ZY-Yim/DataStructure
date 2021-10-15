@@ -261,9 +261,71 @@ add search remove for ordered list: $ O(n) $
 
 ## RECURSION
 
-### What is Recursion?
+### What is Recursion
 
+Recursion is a method of solving problems that involves breaking a problem down into smaller and smaller subproblems until you get to a small enough problem that it can be solved trivially.
 
+#### Calculating the Sum of a List of Numbers
+
+list_sum(num_list) = first(num_list) + list_sum(rest(num_list))
+
+#### The Three Laws of Recursion
+
+1. A recursive algorithm must have a base case.
+2. A recursive algorithm must change its state and move toward the base case.
+3. A recursive algorithm must call itself, recursively.
+
+#### Converting an Integer to a String in Any Base
+
+Knowing what our base is suggests that the overall algorithm will involve three components:
+
+1. Reduce the original number to a series of single-digit numbers.
+2. Convert the single digit-number to a string using a lookup.
+3. Concatenate the single-digit strings together to form the final result
+
+### Stack Frames: Implementing Recursion
+
+When a function is called in Python, a stack frame is allocated to handle the local variables of the function. When the function returns, the return value is left on top of the stack for the calling function to access
+
+### Visualising Recursion
+
+* spiral
+* tree
+* Sierpinski Triangle
+  ![image-20211014202654928](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211014202654928.png)
+
+### Complex Recursive Problems
+
+#### The Towers Of Hanoi
+
+Here is a high-level outline of how to move a tower from the starting pole, to the goal pole, using an intermediate pole:
+
+1. Move a tower of height-1 to an intermediate pole, using the final pole.
+2. Move the remaining disk to the final pole.
+3. Move the tower of height-1 from the intermediate pole to the final pole using the original pole.
+
+### Exploring a Maze
+
+a systematic procedure:
+
+* From our starting position we will first try going North one square and then recursively try our procedure from there.
+* If we are not successful by trying a Northern path as the first step then we will take a step to the South and recursively repeat our procedure.
+* If South does not work then we will try a step to the West as our first step and recursively apply our procedure.
+* If North, South, and West have not been successful then apply the procedure recursively from a position one step to our East.
+* If none of these directions works then there is no way to get out of the maze and we fail.
+
+> in order to avoid infinite loop, we must have a strategy to remember where we have been. In this case we will assume that we have a bag of bread crumbs we can drop along our way. If we take a step in a certain direction and find that there is a bread crumb already on that square, we know that we should immediately back up and try the next direction in our procedure. 
+
+In this algorithm, there are four base cases to consider:
+
+1. The turtle has run into a wall. Since the square is occupied by a wall no further exploration can take place.
+2. The turtle has found a square that has already been explored. We do not want to continue exploring from this position or we will get into a loop.
+3. We have found an outside edge, not occupied by a wall. In other words we have found an exit from the maze.
+4. We have explored a square unsuccessfully in all four directions.
+
+![image-20211015160812816](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211015160812816.png)
+
+## SORTING AND SEARCHING
 
 
 

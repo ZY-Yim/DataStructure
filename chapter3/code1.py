@@ -191,7 +191,7 @@ def do_math(op, op1, op2):
     else:
         return op1 - op2
 
-print(postfix_eval('7 8 + 3 2 + /'))
+# print(postfix_eval('7 8 + 3 2 + /'))
 
     
 
