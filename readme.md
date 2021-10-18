@@ -327,5 +327,174 @@ In this algorithm, there are four base cases to consider:
 
 ## SORTING AND SEARCHING
 
+### Searching
 
+#### The Sequential Search
+
+![image-20211016151938648](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211016151938648.png)
+
+Starting at the first item in the list, we simply move from item to item, following the underlying sequential ordering until we either find what we are looking for or run out of items.
+
+* unordered list
+
+![image-20211016152327963](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211016152327963.png)
+
+the complexity of the sequential search, is 𝑂(𝑛)
+
+* ordered list
+
+![image-20211016153109098](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211016153109098.png)
+
+the complexity of the sequential search, is 𝑂(𝑛)
+
+#### The Binary Search
+
+the binary search is designed for an ordered list
+a binary search will start by examining the middle item. If that item is the one
+we are searching for, we are done. If it is not the correct item, we can use the ordered nature of the list to eliminate half of the remaining items. If the item we are searching for is greater than the middle item, we know that the entire lower half of the list as well as the middle item can be eliminated from further consideration. The item, if it is in the list, must be in the upper half.
+
+![image-20211016154348454](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211016154348454.png)
+
+the complexity of the binary search, is 𝑂(log𝑛)
+
+#### Hashing
+
+build a data structure that can be searched in 𝑂(1) time. This concept is referred to as hashing.
+A hash table is a collection of items which are stored in such a way as to make it easy to find them later. Each position of the hash table, often called a slot, can hold an item and is named by an integer value starting at 0.
+The mapping between an item and the slot where that item belongs in the hash table is called the hash function. The hash function will take any item in the collection and return an integer in the range of slot names, between 0 and 𝑚−1.
+![image-20211016161908858](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211016161908858.png)
+![image-20211016161920414](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211016161920414.png)
+![image-20211016161930183](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211016161930183.png)
+
+##### Hash Functions
+
+Our goal is to create a hash function that minimizes the number of collisions, is easy to compute, and evenly distributes the items in the hash table.
+
+* folding method
+  The folding method for constructing hash functions begins by dividing the item into equal-size pieces (the last piece may not be of equal size). These pieces are then added together to give the resulting hash value.436-555-
+  436-555-4601, (43, 65, 55, 46, 01), sum() = 210, 210%11 = 1
+  some folding methods reverse every other piece before addition
+
+* mid-square method
+  we first square the item, and then extract some portion of the resulting digits
+  44, 44^2 = 1936, extract 93, 93%11 = 5
+
+* hash functions for character-based items such as strings
+
+  ![image-20211016191248698](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211016191248698.png)
+
+  We can then take these three ordinal values, add them up, and use the remainder method to get a hash value.
+  cat, 99+97+116 = 312, 312%11 = 4
+
+##### Collision Resolution
+
+When two items hash to the same slot, we must have a systematic method for placing the second item in the hash table.
+
+* linear probing(open addressing)
+  start at the original hash value position and then move in a sequential manner through the slots until we encounter the first slot that is empty. 
+  
+  ![image-20211016204153003](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211016204153003.png)A disadvantage to linear probing is the tendency for clustering; items become clustered in the table. This means that if many collisions occur at the same hash value, a number of surrounding slots will be filled by the linear probing resolution.
+  One way to deal with clustering is to extend the linear probing technique so that instead of looking sequentially for the next open slot, we skip slots, thereby more evenly distributing the items that have caused collisions.
+  
+  ![image-20211016204214402](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211016204214402.png)new_hash_value = rehash(old_hash_value)
+  rehash(pos) = (pos + 1)%size_of_table
+  rehash(pos) = (pos + 3)%size_of_table
+  in general, rehash(pos) = (pos + skip)%size_of_table
+  
+* quadratic probing
+  Instead of using a constant “skip” value, we use a rehash function that increments the hash value by 1,3,5,7,9, and so on.
+  This means that if the first hash value is ℎ, the successive values are ℎ+1,ℎ+4,ℎ+9,ℎ+16, and so on. In other words, quadratic probing uses a skip consisting of successive perfect squares.
+  ![image-20211016204042874](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211016204042874.png)
+  
+* Chaining
+  Chaining allows many items to exist at the same location in the hash table.
+  ![image-20211016204003500](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211016204003500.png)
+
+##### Implementing the Map Abstract Data Type
+
+The map abstract data type is defined as follows. The structure is an unordered collection of associations between a key and a data value(dictionary). The keys in a map are all unique so that there is a one-to-one relationship between a key and a value.
+
+operations:
+
+* Map()
+* put(key, value)
+* get(key)
+* del map(key)
+* len()
+* in
+
+we will have a result for both a successful and an unsuccessful search. 
+For a successful search using open addressing with linear probing, the average number of comparisons is approximately 
+$$
+\frac{1}{2}(1+\frac{1}{1-𝜆})
+$$
+and an unsuccessful search gives ︁
+$$
+\frac{1}{2}(1+{(\frac{1}{1-𝜆})}^{2})
+$$
+If we are using chaining, the average number of comparisons is 
+$$
+1+\frac{1}{𝜆}
+$$
+for the successful case, and simply 𝜆 comparisons if the search is unsuccessful
+$$
+𝜆
+$$
+
+### Sorting
+
+#### Bubble Sort
+
+the complexity of the bubble sort, is 𝑂(𝑛^2)
+in the best case, if the list is already ordered, no exchanges will be made. However, in the worst case, every comparison will cause an exchange. On average, we exchange half of the time.
+**short bubble sort**: if during a pass there are no exchanges, then we know that the list must be sorted. A bubble sort can be modified to stop early if it finds that the list has become sorted.
+
+#### Selection Sort
+
+the complexity of the selection sort, is 𝑂(𝑛^2)
+The selection sort improves on the bubble sort by making only one exchange for every pass through the list and it executes faster in benchmark studies.
+![image-20211017182417406](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211017182417406.png)
+
+#### The Insertion Sort
+
+the complexity of the insertion sort, is 𝑂(𝑛^2)
+It always maintains a sorted sublist in the lower positions of the list. Each new item is then “inserted” back into the previous sublist such that the sorted sublist is one item larger.
+However, in the best case, only one comparison needs to be done on each pass. This would be the case for an already sorted list.
+![image-20211017182329514](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211017182329514.png)
+
+#### Shell Sort
+
+the complexity of shell sort tends to fall somewhere between 𝑂(𝑛) and 𝑂(𝑛2)
+By changing the increment, for example using 2^𝑘 −1 (1,3,7,15,31, and so on), a shell sort can perform at 𝑂(𝑛^3/2)
+The shell sort, sometimes called the “diminishing increment sort,” improves on the insertion sort by breaking the original list into a number of smaller sublists, each of which is sorted using an insertion sort. the shell sort uses an increment *i*, sometimes called the gap, to create a sublist by choosing all items that are *i* items apart.
+![image-20211017191049041](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211017191049041.png)
+
+#### The Merge Sort
+
+the complexity of merge sort is 𝑂(𝑛log𝑛), split and merge
+Merge sort is a recursive algorithm that continually splits a list in half. If the list is empty or has one item, it is sorted by definition (the base case). If the list has more than one item, we split the list and recursively invoke a merge sort on both halves. Once the two halves are sorted, the fundamental operation, called a merge, is performed. Merging is the process of taking two smaller sorted lists and combining them together into a single, sorted, new list.
+![image-20211017194249591](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211017194249591.png)
+![image-20211017194301007](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211017194301007.png)
+
+the merge_sort function requires extra space to hold the two halves as they are extracted with the slicing operations. This additional space can be a critical
+factor if the list is large and can make this sort problematic when working on large data sets.
+
+#### The Quick Sort
+
+the complexity of quick sort is 𝑂(𝑛log𝑛). for a list of length 𝑛, if the partition always occurs in the middle of the list, there will again be log 𝑛 divisions. In order to find the split point, each of the 𝑛 items needs to be checked against the pivot value. in the worst case, the split points may not be in the middle and can be very skewed to the left or the right, leaving a very uneven division. In this case, sorting a list of 𝑛 items divides into sorting a list of 0 items and a list of 𝑛 − 1 items. Then sorting a list of 𝑛 − 1 divides into a list of size 0 and a list of size 𝑛 − 2, and so on. The result is an 𝑂(𝑛^2) sort with all of the overhead that recursion requires.
+The quick sort uses divide and conquer to gain the same advantages as the merge sort, while not using additional storage.
+![image-20211017203105573](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211017203105573.png)
+![image-20211017203117307](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211017203117307.png)
+
+### Summary
+
+• A sequential search is 𝑂(𝑛) for ordered and unordered lists.
+• A binary search of an ordered list is 𝑂(log 𝑛) in the worst case.
+• Hash tables can provide constant time searching.
+• A bubble sort, a selection sort, and an insertion sort are 𝑂(𝑛^2) algorithms.
+• A shell sort improves on the insertion sort by sorting incremental sublists. It falls between 𝑂(𝑛) and 𝑂(𝑛^2).
+• A merge sort is 𝑂(𝑛log 𝑛), but requires additional space for the merging process.
+• A quick sort is 𝑂(𝑛log 𝑛), but may degrade to 𝑂(𝑛^2) if the split points are not near the middle of the list. It does not require additional space
+
+## TREES AND TREE ALGORITHMS
 
