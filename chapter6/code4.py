@@ -1,0 +1,26 @@
+# this file is about tree traversals
+
+from code3 import buildParseTree
+
+def preorder(tree):
+    if tree:
+        print(tree.getRootVal())
+        preorder(tree.getLeftChild())
+        preorder(tree.getRightChild())
+
+def postorder(tree):
+    if tree != None:
+        postorder(tree.getLeftChild())
+        postorder(tree.getRightChild())
+        print(tree.getRootVal())
+
+def inorder(tree):
+  if tree != None:
+      inorder(tree.getLeftChild())
+      print(tree.getRootVal())
+      inorder(tree.getRightChild())
+
+pt = buildParseTree("( ( 10 + 5 ) * 3 )")
+preorder(pt)
+postorder(pt)
+inorder(pt)

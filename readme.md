@@ -498,3 +498,237 @@ The quick sort uses divide and conquer to gain the same advantages as the merge 
 
 ## TREES AND TREE ALGORITHMS
 
+### Examples of Trees
+
+several properties of trees:
+
+* trees are hierarchical
+* all of the children of one node are independent of the children of another node
+* each leaf node is unique
+
+### Vocabulary and Definition
+
+#### Vocabulary
+
+* Node
+* Edge
+* Root
+* Path
+* Children
+* Parent
+* Sibling
+* Subtree
+* Leaf Node
+* Level: the number of edges on the path from the root node to the node
+* Height: the maximum level of any node in the tree
+
+#### Definition
+
+*Definition One:* A tree consists of a set of nodes and a set of edges that connect pairs of nodes. A tree has the following properties:
+
+- One node of the tree is designated as the root node.
+- Every node *n*, except the root node, is connected by an edge from exactly one other node *p*, where pp is the parent of *n*.
+- A unique path traverses from the root to each node.
+- If each node in the tree has a maximum of two children, we say that the tree is a **binary tree**.
+
+![image-20211018160038669](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211018160038669.png)
+
+*Definition Two:* A tree is either empty or consists of a root and zero or more subtrees, each of which is also a tree. The root of each subtree is connected to the root of the parent tree by an edge.
+
+![image-20211018160059972](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211018160059972.png)
+
+### Implementation
+
+The key decision in implementing a tree is choosing a good internal storage technique. Python allows us two very interesting possibilities, so we will examine both before choosing one. The first technique we will call “list of lists,” the second technique we will call “nodes and references.”
+
+#### List of Lists Representation
+
+In a list of lists tree, we will store the value of the root node as the first element of the list. The second element of the list will itself be a list that represents the left subtree. The third element of the list will be another list that represents the right subtree.
+
+![image-20211018161918086](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211018161918086.png)
+
+![image-20211018161933098](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211018161933098.png)
+
+One very nice property of this list of lists approach is that the structure of a list representing a subtree adheres to the structure defined for a tree; the structure itself is recursive! A subtree that has a root value and two empty lists is a leaf node. Another nice feature of the list of lists approach is that it generalizes to a tree that has many subtrees. In the case where the tree is more than a binary tree, another subtree is just another list.
+
+#### Nodes and References
+
+In this case we will define a class that has attributes for the root value, as well as the left and right subtrees. this representation more closely follows the object-oriented programming paradigm.
+
+### Binary Tree Applications
+
+#### Parse Tree
+
+((7+3)∗(5−2))
+
+![image-20211018192448076](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211018192448076.png)
+
+1. If the current token is a `'('`, add a new node as the left child of the current node, and descend to the left child.
+2. If the current token is in the list `['+','-','/','*']`, set the root value of the current node to the operator represented by the current token. Add a new node as the right child of the current node and descend to the right child.
+3. If the current token is a number, set the root value of the current node to the number and return to the parent.
+4. If the current token is a `')'`, go to the parent of the current node.
+
+#### Tree Traversals
+
+There are three commonly used patterns to visit all the nodes in a tree. The difference between these patterns is the order in which each node is visited. We call this visitation of the nodes a “traversal.” The three traversals we will look at are called **preorder**, **inorder**, and **postorder**. 
+
+* **preorder**
+  In a preorder traversal, we visit the root node first, then recursively do a preorder traversal of the left subtree, followed by a recursive preorder traversal of the right subtree.
+
+* **inorder**
+  In an inorder traversal, we recursively do an inorder traversal on the left subtree, visit the root node, and finally do a recursive inorder traversal of the right subtree.
+
+* postorder
+  In a postorder traversal, we recursively do a postorder traversal of the left subtree and the right subtree followed by a visit to the root node.
+
+### Priority Queues with Binary Heaps
+
+A priority queue acts like a queue in that you dequeue an item by removing it from the front. However, in a priority queue the logical order of items inside a queue is determined by their priority. The highest priority items are at the front of the queue and the lowest priority items are at the back.
+
+The classic way to implement a priority queue is using a data structure called a **binary heap**. A binary heap will allow us both enqueue and dequeue items in *O(log n)*.
+
+The binary heap is interesting to study because when we diagram the heap it looks a lot like a tree, but when we implement it we use only a single list as an internal representation. The binary heap has two common variations: the **min heap**, in which the smallest key is always at the front, and the **max heap**, in which the largest key value is always at the front.
+
+#### Binary Heap Operations
+
+* BinaryHeap()
+* insert(k)
+* findMin()
+* delMin()
+* isEmpty()
+* size()
+* buildHeap(list)
+
+#### Binary Heap Implementation
+
+##### The Structure Property
+
+In our heap implementation we keep the tree balanced by creating a **complete binary tree**. each level has all of its nodes except the bottom level. 
+
+Another interesting property of a complete tree is that we can represent it using a single list. the left child of a parent (at position p) is the node that is found in position 2p in the list. Similarly, the right child of the parent is at position 2p+1 in the list.
+![image-20211026201620327](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211026201620327.png)
+
+##### The Heap Order Property
+
+In a heap, for every node *x* with parent *p*, the key in pp is smaller than or equal to the key in *x*.
+
+##### Heap Operations
+
+The assertion that we can build the heap in O(n)
+
+### Binary Search Trees
+
+#### Search Tree Operations
+
+* Map()
+* put(key, val)
+* get(key)
+* del
+* len()
+* in
+
+#### Search Tree Implementation
+
+A binary search tree relies on the property that keys that are less than the parent are found in the left subtree, and keys that are greater than the parent are found in the right subtree. We will call this the **bst property**.
+![image-20211026210808139](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211026210808139.png)
+inserting a new node in the tree:
+
+- Starting at the root of the tree, search the binary tree comparing the new key to the key in the current node. If the new key is less than the current node, search the left subtree. If the new key is greater than the current node, search the right subtree.
+- When there is no left (or right) child to search, we have found the position in the tree where the new node should be installed.
+- To add a node to the tree, create a new `TreeNode` object and insert the object at the point discovered in the previous step.
+
+#### Search Tree Analysis
+
+If the keys are added in a random order, the height of the tree is going to be around log2n where n is the number of nodes in the tree.
+
+The total number of nodes in a perfectly balanced binary tree is 2^(h+1)−1, where h represents the height of the tree.
+
+In a balanced binary tree, the worst-case performance of `put` is *O(log2 n)*, where n is the number of nodes in the tree. it is possible to construct a search tree that has height n simply by inserting the keys in sorted order. In this case the performance of the `put` method is *O(n)*.
+
+### Balanced Binary Search Trees
+
+**AVL tree**: automatically make sure that the tree remains balanced at all times.
+
+we define the balance factor for a node as the difference between the height of the left subtree and the height of the right subtree.
+$$
+balanceFactor=height(leftSubTree)−height(rightSubTree)
+$$
+The balance factor is greater than zero then the subtree is left-heavy, and the subtree is right heavy if the balance factor is less than zero. If the balance factor is zero then the tree is perfectly in balance.
+
+we define a tree to be in balance if the balance factor is -1, 0, or 1.
+
+#### AVL Tree Performance
+
+$$
+h=1.44logN_h
+$$
+
+At any time the height of our AVL tree is equal to a constant(1.44) times the log of the number of nodes in the tree. This is great news for searching our AVL tree because it limits the search to O(logN).
+
+#### AVL Tree Implementation
+
+Since all new keys are inserted into the tree as leaf nodes and we know that the balance factor for a new leaf is zero, there are no new requirements for the node that was just inserted. But once the new leaf is added we must update the balance factor of its parent. How this new leaf affects the parent’s balance factor depends on whether the leaf node is a left child or a right child. If the new node is a right child the balance factor of the parent will be reduced by one. If the new node is a left child then the balance factor of the parent will be increased by one. This relation can be applied recursively to the grandparent of the new node, and possibly to every ancestor all the way up to the root of the tree. Since this is a recursive procedure let us examine the two base cases for updating balance factors:
+
+- The recursive call has reached the root of the tree.
+- The balance factor of the parent has been adjusted to zero. You should convince yourself that once a subtree has a balance factor of zero, then the balance of its ancestor nodes does not change.
+
+### Summary of Map ADT Implementations
+
+![image-20211027153743539](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211027153743539.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
