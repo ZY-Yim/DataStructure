@@ -867,3 +867,5 @@ The solution to this problem lies in the construction of a minimum weight **span
 
 <img src="C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211125143404357.png" alt="image-20211125143404357" style="zoom:67%;" />
 
+The algorithm we will use to solve this problem is called Prim’s algorithm. Prim’s algorithm belongs to a family of algorithms called the “greedy algorithms” because at each step we will choose the cheapest next step. In this case the cheapest next step is to follow the edge with the lowest weight. Our last step is to develop Prim’s algorithm.
+
