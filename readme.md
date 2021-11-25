@@ -676,59 +676,194 @@ Since all new keys are inserted into the tree as leaf nodes and we know that the
 
 ![image-20211027153743539](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211027153743539.png)
 
+## Graphs and Graph Algorithms
+
+### Vocabulary and Definitions
+
+* vertex(node): key, payload
+* edge(arc): edges may be one-way or two-way, directed gragh or digraph that all edges are all one-way
+* weight: cost to go from one vertex to another  
+* path: a sequence of vertices that are connected by edges
+* cycle: a path that starts and ends at the same vertex. acyclic graph with no cycles, directed acyclic graph
+
+### The Graph Abstract Data Type
+
+- `Graph()` creates a new, empty graph.
+- `addVertex(vert)` adds an instance of `Vertex` to the graph.
+- `addEdge(fromVert, toVert)` Adds a new, directed edge to the graph that connects two vertices.
+- `addEdge(fromVert, toVert, weight)` Adds a new, weighted, directed edge to the graph that connects two vertices.
+- `getVertex(vertKey)` finds the vertex in the graph named `vertKey`.
+- `getVertices()` returns the list of all vertices in the graph.
+- `in` returns `True` for a statement of the form `vertex in graph`, if the given vertex is in the graph, `False` otherwise.
+
+ There are two well-known implementations of a graph, the **adjacency matrix** and the **adjacency list**. 
+
+#### An Adjacency Matrix
+
+<img src="C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211122191042940.png" alt="image-20211122191042940" style="zoom:60%;" />
+
+The advantage of the adjacency matrix is that it is simple, and for small graphs it is easy to see which nodes are connected to other nodes. However, notice that most of the cells in the matrix are empty. Because most of the cells are empty we say that this matrix is “sparse.” 
+
+#### An Adjacency List
+
+<img src="C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211122191410009.png" alt="image-20211122191410009" style="zoom:67%;" />
+
+In an adjacency list implementation we keep a master list of all the vertices in the Graph object and then each vertex object in the graph maintains a list of the other vertices that it is connected to. In our implementation of the `Vertex` class we will use a dictionary rather than a list where the dictionary keys are the vertices, and the values are the weights. 
+
+The advantage of the adjacency list implementation is that it allows us to compactly represent a sparse graph. The adjacency list also allows us to easily find all the links that are directly connected to a particular vertex.
+
+### Breadth First Search
+
+#### The Word Ladder Problem
+
+In a word ladder puzzle you must make the change occur gradually by changing one letter at a time. At each step you must transform one word into another word, you are not allowed to transform a word into a non-word. 
+
+```
+fail
+fall
+pall
+pole
+poll
+pope
+sale
+pale
+page
+sage
+pool
+cool
+fool
+foul
+foil
+```
+
+![image-20211122193025169](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211122193025169.png)
+
+#### Building the Word Ladder Graph
+
+To create the graph, we should connect the words first. Suppose that we have a huge number of buckets, each of them with a four-letter word on the outside, except that one of the letters in the label has been replaced by an underscore. For example, we might have a bucket labeled “pop_.” As we process each word in our list we compare the word with each bucket, using the ‘_' as a wildcard, so both “pope” and “pops” would match “pop_.” Every time we find a matching bucket, we put our word in that bucket. Once we have all the words in the appropriate buckets we know that all the words in the bucket must be connected.
+
+![image-20211122193426044](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211122193426044.png)
+
+#### Implementing Breadth First Search
+
+BFS begins at the starting vertex `s` and colors `start` gray to show that it is currently being explored. Two other values, the distance and the predecessor, are initialized to 0 and `None` respectively for the starting vertex. Finally, `start` is placed on a `Queue`. The next step is to begin to systematically explore vertices at the front of the queue. We explore each new node at the front of the queue by iterating over its adjacency list. As each node on the adjacency list is examined its color is checked. If it is white, the vertex is unexplored, and four things happen:
+
+1. The new, unexplored vertex `nbr`, is colored gray.
+2. The predecessor of `nbr` is set to the current node `currentVert`
+3. The distance to `nbr` is set to the distance to `currentVert + 1`
+4. `nbr` is added to the end of a queue. Adding `nbr` to the end of the queue effectively schedules this node for further exploration, but not until all the other vertices on the adjacency list of `currentVert` have been explored.
+
+<img src="C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211123102304203.png" alt="image-20211123102304203" style="zoom:67%;" />
+
+#### Breadth First Search Analysis
+
+The first thing to observe is that the while loop is executed, at most, one time for each vertex in the graph |V|. You can see that this is true because a vertex must be white before it can be examined and added to the queue. This gives us O(V) for the while loop. The for loop, which is nested inside the while is executed at most once for each edge in the graph, |E|. The reason is that every vertex is dequeued at most once and we examine an edge from node u to node v only when node u is dequeued. This gives us O(E) for the for loop. combining the two loops gives us O(V+E).
+
+Of course doing the breadth first search is only part of the task. Following the links from the starting node to the goal node is the other part of the task. The worst case for this would be if the graph was a single long chain. In this case traversing through all of the vertices would be O(V). The normal case is going to be some fraction of |V| but we would still write O(V).
 
 
 
+#### The Knight’s Tour Problem
+
+The knight’s tour puzzle is played on a chess board with a single chess piece, the knight. The object of the puzzle is to find a sequence of moves that allow the knight to visit every square on the board exactly once.
+
+A graph search is one of the easiest to understand and program. Once again we will solve the problem using two main steps:
+
+- Represent the legal moves of a knight on a chessboard as a graph.
+- Use a graph algorithm to find a path of length rows×columns−1rows×columns−1 where every vertex on the graph is visited exactly once.
+
+### Depth First Search
+
+#### Building the Knight’s Tour Graph
+
+To represent the knight’s tour problem as a graph we will use the following two ideas: Each square on the chessboard can be represented as a node in the graph. Each legal move by the knight can be represented as an edge in the graph.
+
+![image-20211123154500292](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211123154500292.png)
+
+There are exactly 336 edges in the graph. Notice that the vertices corresponding to the edges of the board have fewer connections (legal moves) than the vertices in the middle of the board.
+
+<img src="C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211123155156217.png" alt="image-20211123155156217" style="zoom:80%;" />
+
+#### Implementing Knight’s Tour
+
+Whereas the breadth first search algorithm discussed in the previous section builds a search tree one level at a time, a depth first search creates a search tree by exploring one branch of the tree as deeply as possible.
+
+In this section we will look at two algorithms that implement a depth first search. The first algorithm we will look at directly solves the knight’s tour problem by explicitly forbidding a node to be visited more than once. The second implementation is more general, but allows nodes to be visited more than once as the tree is constructed.
+
+#### Knight’s Tour Analysis
+
+the knight’s tour problem as we have implemented it so far is an exponential algorithm of size $ O(k^N) $, where N is the number of squares on the chess board, and k is a small constant.
+
+The problem with using the vertex with the most available moves as your next vertex on the path is that it tends to have the knight visit the middle squares early on in the tour. When this happens it is easy for the knight to get stranded on one side of the board where it cannot reach unvisited squares on the other side of the board. On the other hand, visiting the squares with the fewest available moves first pushes the knight to visit the squares around the edges of the board first. This ensures that the knight will visit the hard-to-reach corners early and can use the middle squares to hop across the board only when necessary. Utilizing this kind of knowledge to speed up an algorithm is called a heuristic. Humans use heuristics every day to help make decisions, heuristic searches are often used in the field of artificial intelligence. 
+
+#### General Depth First Search
+
+The knight’s tour is a special case of a depth first search where the goal is to create the deepest depth first tree, without any branches. The more general depth first search is actually easier. Its goal is to search as deeply as possible, connecting as many nodes in the graph as possible and branching where necessary.
+
+It is even possible that a depth first search will create more than one tree. When the depth first search algorithm creates a group of trees we call this a **depth first forest**. As with the breadth first search our depth first search makes use of predecessor links to construct the tree. In addition, the depth first search will make use of two additional instance variables in the `Vertex` class. The new instance variables are the discovery and finish times. The discovery time tracks the number of steps in the algorithm before a vertex is first encountered. The finish time is the number of steps in the algorithm before a vertex is colored black. As we will see after looking at the algorithm, the discovery and finish times of the nodes provide some interesting properties we can use in later algorithms.
+
+#### Depth First Search Analysis
+
+The general running time for depth first search is as follows. The loops in `dfs` both run in O(V), not counting what happens in `dfsvisit`, since they are executed once for each vertex in the graph. In `dfsvisit` the loop is executed once for each edge in the adjacency list of the current vertex. Since `dfsvisit` is only called recursively if the vertex is white, the loop will execute a maximum of once for every edge in the graph or O(E). So, the total time for depth first search is O(V+E).
+
+### Topological Sorting
+
+A topological sort takes a directed acyclic graph and produces a linear ordering of all its vertices such that if the graph G contains an edge (v,w) then the vertex v comes before the vertex w in the ordering. Directed acyclic graphs are used in many applications to indicate the precedence of events. Making pancakes is just one example; other examples include software project schedules, precedence charts for optimizing database queries, and multiplying matrices.
+
+<img src="C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211124143952900.png" alt="image-20211124143952900" style="zoom:67%;" />
+
+The topological sort is a simple but useful adaptation of a depth first search. The algorithm for the topological sort is as follows:
+
+1. Call `dfs(g)` for some graph `g`. The main reason we want to call depth first search is to compute the finish times for each of the vertices.
+2. Store the vertices in a list in decreasing order of finish time.
+3. Return the ordered list as the result of the topological sort.
+
+<img src="C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211124144021933.png" alt="image-20211124144021933" style="zoom:67%;" />
 
 
 
+![image-20211124144042973](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211124144042973.png)
 
+### Strongly Connected Components
 
+One graph algorithm that can help find clusters of highly interconnected vertices in a graph is called the strongly connected components algorithm (**SCC**). We formally define a **strongly connected component**, C, of a graph G, as the largest subset of vertices C⊂V such that for every pair of vertices v,w∈C we have a path from v to w and a path from w to v.
 
+<img src="C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211124145815099.png" alt="image-20211124145815099" style="zoom:67%;" />
 
+Once the strongly connected components have been identified we can show a simplified view of the graph by combining all the vertices in one strongly connected component into a single larger vertex.
 
+<img src="C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211124145834778.png" alt="image-20211124145834778" style="zoom:67%;" />
 
+The transposition of a graph G is defined as the graph G^T where all the edges in the graph have been reversed. That is, if there is a directed edge from node A to node B in the original graph then G^T will contain and edge from node B to node A. 
 
+<img src="C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211124145917350.png" alt="image-20211124145917350" style="zoom:67%;" />
 
+We can now describe the algorithm to compute the strongly connected components for a graph.
 
+1. Call `dfs` for the graph GG to compute the finish times for each vertex.
+2. Compute G^T.
+3. Call `dfs` for the graph GTGT but in the main loop of DFS explore each vertex in decreasing order of finish time.
+4. Each tree in the forest computed in step 3 is a strongly connected component. Output the vertex ids for each vertex in each tree in the forest to identify the component.
 
+### Shortest Path Problems
 
+#### Dijkstra’s Algorithm
 
+![image-20211125135046969](C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211125135046969.png)
 
+It is important to note that Dijkstra’s algorithm works only when the weights are all positive. You should convince yourself that if you introduced a negative weight on one of the edges to the graph that the algorithm would never exit.
 
+#### Analysis of Dijkstra’s Algorithm
 
+Finally, let us look at the running time of Dijkstra’s algorithm. We first note that building the priority queue takes O(V) time since we initially add every vertex in the graph to the priority queue. Once the queue is constructed the `while` loop is executed once for every vertex since vertices are all added at the beginning and only removed after that. Within that loop each call to `delMin`, takes O(logV) time. Taken together that part of the loop and the calls to delMin take O(Vlog(V)). The `for` loop is executed once for each edge in the graph, and within the `for` loop the call to `decreaseKey` takes time O(Elog(V)). So the combined running time is O((V+E)log(V)).
 
+#### Prim’s Spanning Tree Algorithm
 
+<img src="C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211125143236202.png" alt="image-20211125143236202" style="zoom:67%;" />
 
+A brute force solution is for the broadcast host to send a single copy of the broadcast message and let the routers sort things out. In this case, the easiest solution is a strategy called **uncontrolled flooding**. The flooding strategy works as follows. Each message starts with a time to live (`ttl`) value set to some number greater than or equal to the number of edges between the broadcast host and its most distant listener. Each router gets a copy of the message and passes the message on to *all* of its neighboring routers. When the message is passed on the `ttl` is decreased. Each router continues to send copies of the message to all its neighbors until the `ttl` value reaches 0. It is easy to convince yourself that uncontrolled flooding generates many more unnecessary messages than our first strategy.
 
+The solution to this problem lies in the construction of a minimum weight **spanning tree**. Formally we define the minimum spanning tree T for a graph G=(V,E) as follows. T is an acyclic subset of E that connects all the vertices in V. The sum of the weights of the edges in T is minimized.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<img src="C:\Users\Yim\AppData\Roaming\Typora\typora-user-images\image-20211125143404357.png" alt="image-20211125143404357" style="zoom:67%;" />
 
